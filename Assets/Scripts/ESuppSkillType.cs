@@ -1,0 +1,1 @@
+﻿    public enum ESupSkillType { atkUp, defUp, spdDown }

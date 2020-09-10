@@ -1,0 +1,1 @@
+﻿public enum EAffinities { fire, wind, water, earth, dark, light }
