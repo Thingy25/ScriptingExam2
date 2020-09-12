@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CrittersHealthUI : MonoBehaviour
 {
+<<<<<<< Updated upstream
     // Start is called before the first frame update
     void Start()
     {
@@ -15,4 +16,7 @@ public class CrittersHealthUI : MonoBehaviour
     {
         
     }
+=======
+
+>>>>>>> Stashed changes
 }
