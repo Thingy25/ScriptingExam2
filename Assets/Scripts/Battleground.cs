@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Battleground 
+public class Battleground : IObserverSubject
 {
     private bool isCharacterTurn;
     public bool IsCharacterTurn { get => isCharacterTurn; }
@@ -11,13 +11,15 @@ public class Battleground
     private int Turn { get => (isCharacterTurn) ? 0 : 1; }
     private int NoTurn { get => (isCharacterTurn) ? 1 : 0; }
 
+    IObserver UI;
+
     public static Battleground Instance { get; private set; }
 
     public delegate void OnCritterUpdate();
     public event OnCritterUpdate OnHealthChange;
     public event OnCritterUpdate OnDeath;
 
-    public Battleground(Competitor character, Competitor enemy)
+    public Battleground(Competitor character, Competitor enemy, IObserver ui)
     {
         //Critter.InCritterDeath += SwapCritter;
 
@@ -31,6 +33,7 @@ public class Battleground
         currentCritters[0] = character.Critters[0];
         currentCritters[1] = enemy.Critters[0];
         isCharacterTurn = currentCritters[0].BaseSpeed >= currentCritters[1].BaseSpeed;
+        UI = ui;
 
         InitiateTurn();
     }
@@ -90,8 +93,14 @@ public class Battleground
     public void UseSkill(int skill)
     {
         currentCritters[Turn].MoveSet[skill].UseSkill(currentCritters[Turn], currentCritters[NoTurn]);
-        OnHealthChange();
+        //OnHealthChange();
+        Notify();
         ChangeTurn();
+    }
+
+    public void Notify()
+    {
+        UI.Receive();
     }
 
     IEnumerator WaitForTurn()

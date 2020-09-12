@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    private const int CRITTER_MAX = 3;
     [SerializeField] private List<CritterStruct> allyCritterData, enemyCritterData;
 
     private List<GameObject> allyCrittersGO = new List<GameObject>();
@@ -20,9 +21,12 @@ public class GameManager : MonoBehaviour
     Competitor character, enemy;
     Critter allyCrit;
     Critter enemyCrit;
+    PanelManager ui;
 
     private void Awake()
     {
+        ui = FindObjectOfType<PanelManager>();
+
         allyPrefab = (GameObject)Resources.Load("Prefabs/AllyCrit", typeof(GameObject));
         enemyPrefab = (GameObject)Resources.Load("Prefabs/EnemyCrit", typeof(GameObject));
 
@@ -34,7 +38,7 @@ public class GameManager : MonoBehaviour
         character = new Competitor(allyCritters);
         enemy = new Competitor(enemyCritters);
 
-        battleground = new Battleground(character, enemy);
+        battleground = new Battleground(character, enemy, (ui as IObserver));
     }
 
     private void Update()
@@ -174,13 +178,17 @@ public class GameManager : MonoBehaviour
 
     public void LimitCritters()
     {
-        if(allyCritterData.Count >= 3)
+        if(allyCritterData.Count >= CRITTER_MAX)
         {
-            for (int i = allyCritterData.Count - 1; i > 3; i--)
+            for (int i = allyCritterData.Count - 1; i >= CRITTER_MAX; i--)
             {
                 allyCritterData.RemoveAt(i);
             }
-            for (int i = allyCritterData.Count - 1; i > 3; i--)
+        }
+
+        if (enemyCritterData.Count >= CRITTER_MAX)
+        {
+            for (int i = enemyCritterData.Count - 1; i >= CRITTER_MAX; i--)
             {
                 enemyCritterData.RemoveAt(i);
             }

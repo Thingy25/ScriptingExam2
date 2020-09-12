@@ -874,6 +874,11 @@ MonoBehaviour:
     baseSpeed: 20
     baseDefense: 90
     affinity: 3
+  - name: Crittazar
+    baseAttack: 90
+    baseSpeed: 17
+    baseDefense: 85
+    affinity: 0
   enemyCritterData:
   - name: Crittersaur
     baseAttack: 20

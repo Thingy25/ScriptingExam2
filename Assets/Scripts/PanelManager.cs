@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class PanelManager : MonoBehaviour
+public class PanelManager : MonoBehaviour, IObserver
 {
     //GameManager gameManager;
 
@@ -14,7 +14,7 @@ public class PanelManager : MonoBehaviour
     {
         texts = GetComponentsInChildren<TextMeshProUGUI>();
 
-        Battleground.Instance.OnHealthChange += UpdateCritterHealth;
+        //Battleground.Instance.OnHealthChange += UpdateCritterHealth;
         
     }
 
@@ -37,7 +37,7 @@ public class PanelManager : MonoBehaviour
                 counter++;
             }
         }
-        texts[2].text = "Livng critters: " + counter;
+        texts[2].text = "Living critters: " + counter;
 
         counter = 0;
         foreach (var item in Battleground.Instance.currentCharacters[1].Critters)
@@ -47,7 +47,12 @@ public class PanelManager : MonoBehaviour
                 counter++;
             }
         }
-        texts[3].text = "Livng critters: " + counter;
+        texts[3].text = "Living critters: " + counter;
+    }
+
+    public void Receive()
+    {
+        UpdateCritterHealth();
     }
 
     //private void Awake()
