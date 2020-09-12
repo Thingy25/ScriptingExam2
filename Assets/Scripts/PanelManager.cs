@@ -8,24 +8,52 @@ public class PanelManager : MonoBehaviour
 {
     //GameManager gameManager;
 
-    //[SerializeField] private TextMeshPro allyCritterHealth;
-    //[SerializeField] private TextMeshProUGUI enemyCritterHealth;
-    //[SerializeField] private TextMeshProUGUI aliveAllyCritters;
-    //[SerializeField] private TextMeshProUGUI aliveEnemyCritters;
-
     TextMeshProUGUI[] texts;
 
     private void Awake()
     {
         texts = GetComponentsInChildren<TextMeshProUGUI>();
+
+        Battleground.Instance.OnHealthChange += UpdateCritterHealth;
+        
     }
 
+    private void Start()
+    {
+        UpdateCritterHealth();
+    }
+
+    public void UpdateCritterHealth()
+    {
+        int counter = 0;
+
+        texts[1].text = "HP: " + Battleground.Instance.currentCritters[0].HP.ToString();
+        texts[4].text = "HP: " + Battleground.Instance.currentCritters[1].HP.ToString();
+
+        foreach(var item in Battleground.Instance.currentCharacters[0].Critters)
+        {
+            if(item.HP > 0)
+            {
+                counter++;
+            }
+        }
+        texts[2].text = "Livng critters: " + counter;
+
+        counter = 0;
+        foreach (var item in Battleground.Instance.currentCharacters[1].Critters)
+        {
+            if (item.HP > 0)
+            {
+                counter++;
+            }
+        }
+        texts[3].text = "Livng critters: " + counter;
+    }
 
     //private void Awake()
     //{
     //    gameManager = FindObjectOfType<GameManager>();
 
-    //    Battleground.Instance.onCritterUpdate += new Battleground.OnCritterUpdate(OnCritterUpdate);
     //}
 
     //[SerializeField] private TextMeshProUGUI gunPieceText;

@@ -6,13 +6,16 @@ public class Battleground
 {
     private bool isCharacterTurn;
     public bool IsCharacterTurn { get => isCharacterTurn; }
-    private Competitor[] currentCharacters = new Competitor[2];
+    public Competitor[] currentCharacters = new Competitor[2];
     public Critter[] currentCritters = new Critter[2];
     private int Turn { get => (isCharacterTurn) ? 0 : 1; }
     private int NoTurn { get => (isCharacterTurn) ? 1 : 0; }
-    public delegate void OnCritterUpdate();
-    public event OnCritterUpdate onCritterUpdate;
+
     public static Battleground Instance { get; private set; }
+
+    public delegate void OnCritterUpdate();
+    public event OnCritterUpdate OnHealthChange;
+    public event OnCritterUpdate OnDeath;
 
     public Battleground(Competitor character, Competitor enemy)
     {
@@ -87,7 +90,7 @@ public class Battleground
     public void UseSkill(int skill)
     {
         currentCritters[Turn].MoveSet[skill].UseSkill(currentCritters[Turn], currentCritters[NoTurn]);
-        Debug.Log("holi");
+        OnHealthChange();
         ChangeTurn();
     }
 
