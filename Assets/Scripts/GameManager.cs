@@ -4,84 +4,186 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField]
-    private List<CritterStruct> CritterData = new List<CritterStruct> ();
+    [SerializeField] private List<CritterStruct> allyCritterData, enemyCritterData;
 
-    [SerializeField]
-    private List<Critter> Critters = new List<Critter>();
+    private List<GameObject> allyCrittersGO = new List<GameObject>();
+    private List<GameObject> enemyCrittersGO = new List<GameObject>();
 
-    Competitor comp;
+    GameObject allyPrefab, enemyPrefab;
+    Transform[] spawnsCrit;
 
-    Competitor player = new Competitor();
-    Competitor enemy = new Competitor();
+    List<Critter> allyCritters = new List<Critter>(), enemyCritters = new List<Critter>();
+
+    [SerializeField] float spawnOffset = 5;
+
+    Battleground battleground;
+    Competitor character, enemy;
     Critter allyCrit;
     Critter enemyCrit;
 
-    int selectSkill;
-
     private void Awake()
     {
-        selectSkill = Random.Range(1, 101);
+        allyPrefab = (GameObject)Resources.Load("Prefabs/AllyCrit", typeof(GameObject));
+        enemyPrefab = (GameObject)Resources.Load("Prefabs/EnemyCrit", typeof(GameObject));
 
-        //foreach (var item in comp.crits)
-        //{
-        //    item.GetComponent<Critter>();
-        //    switch (selectSkill)
-        //    {
-        //        case 1:
-        //            item.gameObject.add;
-        //            break;
-        //        case 2:
-        //            break;
-        //        case 3:
-        //            break;
-        //        case 4:
-        //            break;
-        //    }
-        //}
-        //allyCrit = new Critter("Critachu", selectSkill, selectSkill, rand.Next(1, 51), EAffinities.light);
-        //allyCrit.AddSupportSkill("Critlightning", ESupSkillType.atkUp);
-        //allyCrit.AddAttackSkill("Critfire", EAffinities.fire, 5);
-        //allyCrit.AddAttackSkill("Critstorm", EAffinities.light, 10);
-        //player.AddCritter(allyCrit);
+        spawnsCrit = GetComponentsInChildren<Transform>();
 
-        //allyCrit = new Critter("Critterpie", selectSkill, selectSkill, rand.Next(1, 51), EAffinities.earth);
-        //allyCrit.AddSupportSkill("Critwall", ESupSkillType.defUp);
-        //allyCrit.AddAttackSkill("Critrocks", EAffinities.earth, 2);
-        //allyCrit.AddSupportSkill("Critsilk", ESupSkillType.spdDown);
-        //player.AddCritter(allyCrit);
+        LimitCritters();
+        CreateCritters();
 
-        //allyCrit = new Critter("Critmander", selectSkill, selectSkill, rand.Next(1, 51), EAffinities.fire);
-        //allyCrit.AddAttackSkill("Critcatoa", EAffinities.fire, 6);
-        //allyCrit.AddAttackSkill("Critflames", EAffinities.dark, 8);
-        //allyCrit.AddAttackSkill("Crittail", EAffinities.wind, 3);
-        //player.AddCritter(allyCrit);
+        character = new Competitor(allyCritters);
+        enemy = new Competitor(enemyCritters);
+
+        battleground = new Battleground(character, enemy);
     }
 
     private void Update()
     {
-        //switch (selectSkill)
-        //{
-        //    case 1:
-        //        AddAttackSkill();
-        //        break;
-        //    case 2:
-        //        AddSupportSkill();
-        //        break;
-        //    case 3:
-        //        AddSupportSkill();
-        //        break;
-        //    case 4:
-        //        AddSupportSkill();
-        //        break;
-        //}
+        if (battleground.IsCharacterTurn == true)
+        {
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                battleground.UseSkill(0);
+            }
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                battleground.UseSkill(1);
+            }
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                battleground.UseSkill(2);
+            }
+        }
     }
-
-   
 
     private void CreateCritters()
     {
+        GameObject instance = null;
+        Critter instanceCrit = null;
 
+        int selectSkill, selectAffinity;
+
+        #region AllyCritters
+        for (int i = 0; i < allyCritterData.Count; i++)
+        {
+            instance = Instantiate(allyPrefab, spawnsCrit[1].position, spawnsCrit[1].rotation);
+            instanceCrit = instance.GetComponent<Critter>();
+            instanceCrit.Create(allyCritterData[i]);
+            allyCritters.Add(instanceCrit);
+
+            for (int f = 0; f < 3; f++)
+            {
+                selectSkill = Random.Range(1, 5);
+                switch (selectSkill)
+                {
+                    case 1:
+                        selectAffinity = Random.Range(1, 7);
+                        switch (selectAffinity)
+                        {
+                            case 1:
+                                instanceCrit.AddAttackSkill("Attack", EAffinities.fire, Random.Range(1, 11));
+                                break;
+                            case 2:
+                                instanceCrit.AddAttackSkill("Attack", EAffinities.dark, Random.Range(1, 11));
+                                break;
+                            case 3:
+                                instanceCrit.AddAttackSkill("Attack", EAffinities.earth, Random.Range(1, 11));
+                                break;
+                            case 4:
+                                instanceCrit.AddAttackSkill("Attack", EAffinities.light, Random.Range(1, 11));
+                                break;
+                            case 5:
+                                instanceCrit.AddAttackSkill("Attack", EAffinities.water, Random.Range(1, 11));
+                                break;
+                            case 6:
+                                instanceCrit.AddAttackSkill("Attack", EAffinities.wind, Random.Range(1, 11));
+                                break;
+                        }
+                        break;
+                    case 2:
+                        instanceCrit.AddSupportSkill("Attack Up", ESupSkillType.atkUp);
+                        break;
+                    case 3:
+                        instanceCrit.AddSupportSkill("Defense up", ESupSkillType.defUp);
+                        break;
+                    case 4:
+                        instanceCrit.AddSupportSkill("Speed down", ESupSkillType.spdDown);
+                        break;
+                }
+            }
+
+            allyCrittersGO.Add(instance);
+            spawnsCrit[1].position += Vector3.forward * spawnOffset;
+        }
+        #endregion
+
+        #region EnemyCritters
+        for (int i = 0; i < enemyCritterData.Count; i++)
+        {
+            instance = Instantiate(enemyPrefab, spawnsCrit[2].position, spawnsCrit[2].rotation);
+            instanceCrit = instance.GetComponent<Critter>();
+            instanceCrit.Create(enemyCritterData[i]);
+            enemyCritters.Add(instanceCrit);
+
+            for (int f = 0; f < 3; f++)
+            {
+                selectSkill = Random.Range(1, 5);
+                switch (selectSkill)
+                {
+                    case 1:
+                        selectAffinity = Random.Range(1, 7);
+                        switch (selectAffinity)
+                        {
+                            case 1:
+                                instanceCrit.AddAttackSkill("Attack", EAffinities.fire, Random.Range(1, 11));
+                                break;
+                            case 2:
+                                instanceCrit.AddAttackSkill("Attack", EAffinities.dark, Random.Range(1, 11));
+                                break;
+                            case 3:
+                                instanceCrit.AddAttackSkill("Attack", EAffinities.earth, Random.Range(1, 11));
+                                break;
+                            case 4:
+                                instanceCrit.AddAttackSkill("Attack", EAffinities.light, Random.Range(1, 11));
+                                break;
+                            case 5:
+                                instanceCrit.AddAttackSkill("Attack", EAffinities.water, Random.Range(1, 11));
+                                break;
+                            case 6:
+                                instanceCrit.AddAttackSkill("Attack", EAffinities.wind, Random.Range(1, 11));
+                                break;
+                        }
+                        break;
+                    case 2:
+                        instanceCrit.AddSupportSkill("Attack Up", ESupSkillType.atkUp);
+                        break;
+                    case 3:
+                        instanceCrit.AddSupportSkill("Defense up", ESupSkillType.defUp);
+                        break;
+                    case 4:
+                        instanceCrit.AddSupportSkill("Speed down", ESupSkillType.spdDown);
+                        break;
+                }
+            }
+
+            enemyCrittersGO.Add(instance);
+            spawnsCrit[2].position += Vector3.forward * spawnOffset;
+        }
+        #endregion
     }
 
+    public void LimitCritters()
+    {
+        if(allyCritterData.Count >= 3)
+        {
+            for (int i = allyCritterData.Count - 1; i > 3; i--)
+            {
+                allyCritterData.RemoveAt(i);
+            }
+            for (int i = allyCritterData.Count - 1; i > 3; i--)
+            {
+                enemyCritterData.RemoveAt(i);
+            }
+        }
+    }
 }
