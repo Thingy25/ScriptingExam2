@@ -4,21 +4,14 @@ using UnityEngine;
 
 public class Critter : MonoBehaviour
 {
-    public string Name;
-    public float BaseAttack;
-    public float BaseDefense;
-    public float BaseSpeed;
-    public EAffinities Affin;
-    public float HP;
+    public string Name { get; protected set; }
+    public float BaseAttack { get; protected set; }
+    public float BaseDefense { get; protected set; }
+    public float BaseSpeed { get; protected set; }
+    public EAffinities Affin { get; protected set; }
+    public float HP { get; protected set; }
 
-    //public string Name { get; protected set; }
-    //public float BaseAttack { get; protected set; }
-    //public float BaseDefense { get; protected set; }
-    //public float BaseSpeed { get; protected set; }
-    //public EAffinities Affin { get; protected set; }
-    //public float HP { get; protected set; }
-
-    private List<Skill> moveSet = new List<Skill>();
+    public List<Skill> moveSet = new List<Skill>();
     public List<Skill> MoveSet { get => moveSet; }
 
     public int attackCounter = 0;
@@ -29,24 +22,24 @@ public class Critter : MonoBehaviour
     public float realDefense;
     public float realSpeed;
 
-    //public void CreateCritter(int baseAttack, int baseDefense, int baseSpeed, EAffinities affin)
-    //{
-    //    this.Affin = affin;
-    //    Name = name;
-    //    if (baseAttack >= 10 && baseAttack <= 100) BaseAttack = baseAttack;
-    //    else BaseAttack = 10;
-    //    if (baseDefense >= 10 && baseDefense <= 100) BaseDefense = baseDefense;
-    //    else BaseDefense = 10;
-    //    if (baseSpeed >= 1 && baseSpeed <= 50) BaseSpeed = baseSpeed;
-    //    else BaseSpeed = 1;
-    //    HP = 100;
-    //}
+    public void Create(CritterStruct critStruct)
+    {
+        this.Affin = critStruct.affinity;
+        Name = critStruct.name;
+        if (critStruct.baseAttack >= 10 && critStruct.baseAttack <= 100) BaseAttack = critStruct.baseAttack;
+        else BaseAttack = 10;
+        if (critStruct.baseDefense >= 10 && critStruct.baseDefense <= 100) BaseDefense = critStruct.baseDefense;
+        else BaseDefense = 10;
+        if (critStruct.baseSpeed >= 1 && critStruct.baseSpeed <= 50) BaseSpeed = critStruct.baseSpeed;
+        else BaseSpeed = 1;
+        HP = 100;
+    }
 
     public void AddSupportSkill(string name, ESupSkillType type)
     {
         if (MoveSet.Count < 3)
         {
-            //moveSet.Add(new SupportSkill(name, type));
+            MoveSet.Add(new SupportSkill(name, type));
         }
         else
         {
@@ -58,7 +51,7 @@ public class Critter : MonoBehaviour
     {
         if (MoveSet.Count < 3)
         {
-            moveSet.Add(new AttackSkill(name, affinity, power));
+            MoveSet.Add(new AttackSkill(name, affinity, power));
         }
         else
         {

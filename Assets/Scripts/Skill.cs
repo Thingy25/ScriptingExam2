@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Skill : MonoBehaviour
+public abstract class Skill
 {
     public string Name { get; protected set; }
     public EAffinities Affinity { get; protected set; }
