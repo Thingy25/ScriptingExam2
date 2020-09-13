@@ -128,9 +128,6 @@ public class GameManager : MonoBehaviour
                         instanceCrit.AddSupportSkill("Speed down", ESupSkillType.spdDown);
                         break;
                 }
-                Debug.Log("allymoveset:" + instanceCrit.MoveSet[f].Name);
-                Debug.Log("attack affinity: " + instanceCrit.moveSet[0].Affinity);
-                Debug.Log("powah: " + instanceCrit.moveSet[0].Power);
             }
 
             allyCrittersGO.Add(instance);
@@ -186,9 +183,7 @@ public class GameManager : MonoBehaviour
                         instanceCrit.AddSupportSkill("Speed down", ESupSkillType.spdDown);
                         break;
                 }
-                Debug.Log("enemymoveset :" + instanceCrit.MoveSet[f].Name);
             }
-
             enemyCrittersGO.Add(instance);
             spawnsCrit[2].position += Vector3.forward * spawnOffset;
         }
