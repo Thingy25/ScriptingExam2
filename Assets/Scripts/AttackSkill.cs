@@ -15,12 +15,6 @@ public class AttackSkill : Skill
         float affMultiplier, dmgValue;
         affMultiplier = Utilities.Compare(Affinity, enemy.Affin);
         dmgValue = (ally.BaseAttack + Power) * affMultiplier;
-
-        //Console.WriteLine(ally.Name + " has attacked: " + enemy.Name + "!");
         enemy.ReceiveDamage(dmgValue);
-        if (enemy.HP > 0)
-        {
-            //Console.WriteLine(enemy.Name + "'s health is: " + enemy.HP);
-        }
     }
 }

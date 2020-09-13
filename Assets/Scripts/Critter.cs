@@ -5,6 +5,7 @@ using System;
 
 public class Critter : MonoBehaviour
 {
+    private const int SKILL_MAX = 3;
     public static Action<Critter> OnCritterDeath;
 
     public string Name { get; protected set; }
@@ -40,25 +41,17 @@ public class Critter : MonoBehaviour
 
     public void AddSupportSkill(string name, ESupSkillType type)
     {
-        if (MoveSet.Count < 3)
+        if (MoveSet.Count < SKILL_MAX)
         {
             MoveSet.Add(new SupportSkill(name, type));
-        }
-        else
-        {
-            //No hay espacios de skill disponibles
         }
     }
 
     public void AddAttackSkill(string name, EAffinities affinity, float power)
     {
-        if (MoveSet.Count < 3)
+        if (MoveSet.Count < SKILL_MAX)
         {
             MoveSet.Add(new AttackSkill(name, affinity, power));
-        }
-        else
-        {
-            //No hay espacios de skill disponibles
         }
     }
 

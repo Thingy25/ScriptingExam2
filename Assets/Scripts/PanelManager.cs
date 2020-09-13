@@ -6,8 +6,6 @@ using TMPro;
 
 public class PanelManager : MonoBehaviour, IObserver
 {
-    //GameManager gameManager;
-
     [SerializeField] GameObject abilityButtonOne;
     [SerializeField] GameObject abilityButtonTwo;
     [SerializeField] GameObject abilityButtonThree;
@@ -17,9 +15,6 @@ public class PanelManager : MonoBehaviour, IObserver
     private void Awake()
     {
         texts = GetComponentsInChildren<TextMeshProUGUI>();
-
-        //Battleground.Instance.OnHealthChange += UpdateCritterHealth;
-
     }
 
     private void Start()
@@ -68,19 +63,6 @@ public class PanelManager : MonoBehaviour, IObserver
         {
             texts[0].text = "You have won the battle!!!";
         }
-    }
-
-    public void NotifyDeadCritter()
-    {
-        if (true)
-        {
-
-        }
-    }
-
-    public void NotifyVictory()
-    {
-  
     }
 
     public void HideAbilities()

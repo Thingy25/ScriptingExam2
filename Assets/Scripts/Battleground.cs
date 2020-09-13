@@ -37,19 +37,6 @@ public class Battleground : IObserverSubject
         UI = ui;
 
         Notify();
-        InitiateTurn();
-    }
-
-    private void InitiateTurn()
-    {
-        //int skillIndex = 0;
-        if (isCharacterTurn) { }
-        else
-        {
-
-        }
-        //currentCritters[Turn].MoveSet[skillIndex].UseSkill(currentCritters[Turn], currentCritters[NoTurn]);
-        //ChangeTurn();
     }
 
     public void ChangeTurn()
@@ -60,18 +47,7 @@ public class Battleground : IObserverSubject
             {
                 isCharacterTurn = !isCharacterTurn;
                 Notify();
-                InitiateTurn();
             }
-            else
-            {
-                //Console.WriteLine("\n\nOne player does not have any critters alive, the battle has ended.");
-                //Console.WriteLine("Thanks for playing, press any key to exit.");
-            }
-        }
-        else
-        {
-            //Console.WriteLine("\n\nOne player does not have any critters alive, the battle has ended.");
-            //Console.WriteLine("Thanks for playing, press any key to exit.");
         }
     }
     
@@ -83,7 +59,6 @@ public class Battleground : IObserverSubject
     public void UseSkill(int skill)
     {
         currentCritters[Turn].MoveSet[skill].UseSkill(currentCritters[Turn], currentCritters[NoTurn]);
-        //OnHealthChange();
         Notify(skill);
         ChangeTurn();
     }
@@ -104,22 +79,23 @@ public class Battleground : IObserverSubject
         currentCharacters[NoTurn].RemoveBattlegroundCritter();
         currentCharacters[Turn].AddCritter(deadCrit);
 
-        //if (currentCharacters[NoTurn].Critters.Count > 0)
-        //{
-        //    if (currentCharacters[NoTurn].Critters[0].HP > 0)
-        //    {
-        //        currentCritters[NoTurn] = currentCharacters[NoTurn].Critters[0];
-        //        if (isCharacterTurn)
-        //        {
-        //            currentCritters[NoTurn].transform.position = GameManager.Instance.spawnsCrit[4].transform.position;
-        //            GameManager.Instance.spawnsCrit[4].position += Vector3.up * offset;
-        //        }
-        //        else
-        //        {
-        //            currentCritters[NoTurn].transform.position = GameManager.Instance.spawnsCrit[3].transform.position;
-        //            GameManager.Instance.spawnsCrit[3].position += Vector3.up * offset;
-        //        }
-        //    }
-        //}
+        if (currentCharacters[NoTurn].Critters.Count > 0)
+        {
+            if (isCharacterTurn)
+            {
+                currentCritters[NoTurn].transform.position = GameManager.Instance.spawnsCrit[4].transform.position;
+                GameManager.Instance.spawnsCrit[4].position += Vector3.up * offset;
+            }
+            else
+            {
+                currentCritters[NoTurn].transform.position = GameManager.Instance.spawnsCrit[3].transform.position;
+                GameManager.Instance.spawnsCrit[3].position += Vector3.up * offset;
+            }
+
+            if (currentCharacters[NoTurn].Critters[0].HP > 0)
+            {
+                currentCritters[NoTurn] = currentCharacters[NoTurn].Critters[0];              
+            }
+        }
     }
 }
