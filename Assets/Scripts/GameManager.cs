@@ -218,4 +218,12 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    public void RestartScene()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene);
+        }
+    }
 }

@@ -61,7 +61,7 @@ public class Battleground : IObserverSubject
         //ChangeTurn();
     }
 
-    public void ChangeTurn(int skill)
+    public void ChangeTurn()
     {
         if (currentCharacters[NoTurn].Critters.Count > 0)
         {
@@ -69,7 +69,7 @@ public class Battleground : IObserverSubject
             {
                 isCharacterTurn = !isCharacterTurn;
                 InitiateTurn();
-                Notify(skill);
+                //Notify(skill);
             }
             else
             {
@@ -94,7 +94,7 @@ public class Battleground : IObserverSubject
         currentCritters[Turn].MoveSet[skill].UseSkill(currentCritters[Turn], currentCritters[NoTurn]);
         //OnHealthChange();
         Notify(skill);
-        ChangeTurn(skill);
+        ChangeTurn();
     }
 
     public void Notify(int skill)

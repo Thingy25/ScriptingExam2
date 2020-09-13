@@ -86,6 +86,19 @@ public class PanelManager : MonoBehaviour, IObserver
 
     public void HideAbilities()
     {
+        //if (Battleground.Instance.IsCharacterTurn)
+        //{
+        //    abilityButtonOne.SetActive(true);
+        //    abilityButtonTwo.SetActive(true);
+        //    abilityButtonThree.SetActive(true);
+        //}
+        //else
+        //{
+        //    abilityButtonOne.SetActive(false);
+        //    abilityButtonTwo.SetActive(false);
+        //    abilityButtonThree.SetActive(false);
+        //}
+
         //while (Battleground.Instance.IsCharacterTurn)
         //{
         //    abilityButtonOne.SetActive(true);
@@ -96,8 +109,8 @@ public class PanelManager : MonoBehaviour, IObserver
 
     public void Receive(int skill)
     {
-        UpdateCritterHealth();
         ShowUsedSkill(skill);
+        UpdateCritterHealth();
         HideAbilities();
     }
 
