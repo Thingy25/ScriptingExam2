@@ -8,6 +8,10 @@ public class PanelManager : MonoBehaviour, IObserver
 {
     //GameManager gameManager;
 
+    [SerializeField] GameObject abilityButtonOne;
+    [SerializeField] GameObject abilityButtonTwo;
+    [SerializeField] GameObject abilityButtonThree;
+
     TextMeshProUGUI[] texts;
 
     private void Awake()
@@ -15,7 +19,7 @@ public class PanelManager : MonoBehaviour, IObserver
         texts = GetComponentsInChildren<TextMeshProUGUI>();
 
         //Battleground.Instance.OnHealthChange += UpdateCritterHealth;
-        
+
     }
 
     private void Start()
@@ -27,17 +31,17 @@ public class PanelManager : MonoBehaviour, IObserver
     {
         int counter = 0;
 
-        texts[1].text = "HP: " + Battleground.Instance.currentCritters[0].HP.ToString();
-        texts[4].text = "HP: " + Battleground.Instance.currentCritters[1].HP.ToString();
+        texts[2].text = "HP: " + Battleground.Instance.currentCritters[0].HP.ToString();
+        texts[5].text = "HP: " + Battleground.Instance.currentCritters[1].HP.ToString();
 
-        foreach(var item in Battleground.Instance.currentCharacters[0].Critters)
+        foreach (var item in Battleground.Instance.currentCharacters[0].Critters)
         {
-            if(item.HP > 0)
+            if (item.HP > 0)
             {
                 counter++;
             }
         }
-        texts[2].text = "Living critters: " + counter;
+        texts[3].text = "Living critters: " + counter;
 
         counter = 0;
         foreach (var item in Battleground.Instance.currentCharacters[1].Critters)
@@ -47,12 +51,54 @@ public class PanelManager : MonoBehaviour, IObserver
                 counter++;
             }
         }
-        texts[3].text = "Living critters: " + counter;
+        texts[4].text = "Living critters: " + counter;
     }
 
-    public void Receive()
+    public void ShowUsedSkill(int skill)
+    {
+        int turn = Battleground.Instance.Turn;
+        //int noTurn = Battleground.Instance.NoTurn;
+        texts[0].text = Battleground.Instance.currentCritters[turn].Name.ToString() + " has used " + Battleground.Instance.currentCritters[turn].MoveSet[skill].Name.ToString();
+
+        if (Battleground.Instance.currentCharacters[0].Critters.Count == 0)
+        {
+            texts[0].text = "Jessie Team Critcket has won the battle!!!" + "Press [R] to restart the fight";
+
+        }
+        else if (Battleground.Instance.currentCharacters[1].Critters.Count == 0)
+        {
+            texts[0].text = "You have won the battle!!!" + "Press [R] to restart the fight";
+        }
+    }
+
+    public void NotifyDeadCritter()
+    {
+        if (true)
+        {
+
+        }
+    }
+
+    public void NotifyVictory()
+    {
+  
+    }
+
+    public void HideAbilities()
+    {
+        //while (Battleground.Instance.IsCharacterTurn)
+        //{
+        //    abilityButtonOne.SetActive(true);
+        //    abilityButtonTwo.SetActive(true);
+        //    abilityButtonThree.SetActive(true);
+        //}
+    }
+
+    public void Receive(int skill)
     {
         UpdateCritterHealth();
+        ShowUsedSkill(skill);
+        HideAbilities();
     }
 
     //private void Awake()

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance { get; private set; }
+
     private const int CRITTER_MAX = 3;
     [SerializeField] private List<CritterStruct> allyCritterData, enemyCritterData;
 
@@ -11,11 +13,13 @@ public class GameManager : MonoBehaviour
     private List<GameObject> enemyCrittersGO = new List<GameObject>();
 
     GameObject allyPrefab, enemyPrefab;
-    Transform[] spawnsCrit;
+    public Transform[] spawnsCrit;
+    Transform[] deadSpawns;
 
     List<Critter> allyCritters = new List<Critter>(), enemyCritters = new List<Critter>();
 
     [SerializeField] float spawnOffset = 5;
+    [SerializeField] float timeForEnemyAttack;
 
     Battleground battleground;
     Competitor character, enemy;
@@ -25,6 +29,11 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+
         ui = FindObjectOfType<PanelManager>();
 
         allyPrefab = (GameObject)Resources.Load("Prefabs/AllyCrit", typeof(GameObject));
@@ -48,14 +57,17 @@ public class GameManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 battleground.UseSkill(0);
+                StartCoroutine(WaitForEnemyTurn());
             }
             if (Input.GetKeyDown(KeyCode.W))
             {
                 battleground.UseSkill(1);
+                StartCoroutine(WaitForEnemyTurn());
             }
             if (Input.GetKeyDown(KeyCode.E))
             {
                 battleground.UseSkill(2);
+                StartCoroutine(WaitForEnemyTurn());
             }
         }
     }
@@ -77,7 +89,8 @@ public class GameManager : MonoBehaviour
 
             for (int f = 0; f < 3; f++)
             {
-                selectSkill = Random.Range(1, 5);
+                if (f == 0){ selectSkill = 1; }
+                else { selectSkill = Random.Range(1, 5); }
                 switch (selectSkill)
                 {
                     case 1:
@@ -114,6 +127,9 @@ public class GameManager : MonoBehaviour
                         instanceCrit.AddSupportSkill("Speed down", ESupSkillType.spdDown);
                         break;
                 }
+                Debug.Log("allymoveset:" + instanceCrit.MoveSet[f].Name);
+                Debug.Log("attack affinity: " + instanceCrit.moveSet[0].Affinity);
+                Debug.Log("powah: " + instanceCrit.moveSet[0].Power);
             }
 
             allyCrittersGO.Add(instance);
@@ -131,7 +147,8 @@ public class GameManager : MonoBehaviour
 
             for (int f = 0; f < 3; f++)
             {
-                selectSkill = Random.Range(1, 5);
+                if (f == 0) { selectSkill = 1; }
+                else { selectSkill = Random.Range(1, 5); }
                 switch (selectSkill)
                 {
                     case 1:
@@ -168,12 +185,19 @@ public class GameManager : MonoBehaviour
                         instanceCrit.AddSupportSkill("Speed down", ESupSkillType.spdDown);
                         break;
                 }
+                Debug.Log("enemymoveset :" + instanceCrit.MoveSet[f].Name);
             }
 
             enemyCrittersGO.Add(instance);
             spawnsCrit[2].position += Vector3.forward * spawnOffset;
         }
         #endregion
+    }
+
+    IEnumerator WaitForEnemyTurn()
+    {
+        yield return new WaitForSeconds(timeForEnemyAttack);
+        Battleground.Instance.UseSkill(Random.Range(0, 3));
     }
 
     public void LimitCritters()

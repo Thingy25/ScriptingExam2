@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Battleground : IObserverSubject
 {
@@ -8,8 +9,8 @@ public class Battleground : IObserverSubject
     public bool IsCharacterTurn { get => isCharacterTurn; }
     public Competitor[] currentCharacters = new Competitor[2];
     public Critter[] currentCritters = new Critter[2];
-    private int Turn { get => (isCharacterTurn) ? 0 : 1; }
-    private int NoTurn { get => (isCharacterTurn) ? 1 : 0; }
+    public int Turn { get => (isCharacterTurn) ? 0 : 1; }
+    public int NoTurn { get => (isCharacterTurn) ? 1 : 0; }
 
     IObserver UI;
 
@@ -21,7 +22,7 @@ public class Battleground : IObserverSubject
 
     public Battleground(Competitor character, Competitor enemy, IObserver ui)
     {
-        //Critter.InCritterDeath += SwapCritter;
+        Critter.OnCritterDeath += SwapCritter;  //me fui a mimir
 
         if (Instance == null)
         {
@@ -53,16 +54,14 @@ public class Battleground : IObserverSubject
         else
         {
             //Console.WriteLine("\nThe enemy's turn!");
-            UseSkill(Random.Range(0, 3));
             //skillIndex = rand.Next(0, currentCritters[Turn].MoveSet.Count);
             //Console.WriteLine("The enemy has used: {0}", currentCritters[Turn].MoveSet[skillIndex].Name);
         }
         //currentCritters[Turn].MoveSet[skillIndex].UseSkill(currentCritters[Turn], currentCritters[NoTurn]);
         //ChangeTurn();
-
     }
 
-    private void ChangeTurn()
+    public void ChangeTurn(int skill)
     {
         if (currentCharacters[NoTurn].Critters.Count > 0)
         {
@@ -70,7 +69,7 @@ public class Battleground : IObserverSubject
             {
                 isCharacterTurn = !isCharacterTurn;
                 InitiateTurn();
-
+                Notify(skill);
             }
             else
             {
@@ -94,23 +93,17 @@ public class Battleground : IObserverSubject
     {
         currentCritters[Turn].MoveSet[skill].UseSkill(currentCritters[Turn], currentCritters[NoTurn]);
         //OnHealthChange();
-        Notify();
-        ChangeTurn();
+        Notify(skill);
+        ChangeTurn(skill);
     }
 
-    public void Notify()
+    public void Notify(int skill)
     {
-        UI.Receive();
-    }
-
-    IEnumerator WaitForTurn()
-    {
-        yield return new WaitForSeconds(20f);
+        UI.Receive(skill);
     }
 
     private void SwapCritter(Critter deadCrit)
     {
-        //Console.WriteLine(deadCrit.Name + " is dead, it has a new slaver.");
         currentCharacters[NoTurn].RemoveBattlegroundCritter();
         currentCharacters[Turn].AddCritter(deadCrit);
 
@@ -119,6 +112,14 @@ public class Battleground : IObserverSubject
             if (currentCharacters[NoTurn].Critters[0].HP > 0)
             {
                 currentCritters[NoTurn] = currentCharacters[NoTurn].Critters[0];
+                if (isCharacterTurn)
+                {
+                    currentCritters[NoTurn].transform.position = GameManager.Instance.spawnsCrit[4].transform.position;
+                }
+                else
+                {
+                    currentCritters[NoTurn].transform.position = GameManager.Instance.spawnsCrit[3].transform.position;
+                }
                 //Console.WriteLine("\n-----------------" + currentCritters[NoTurn].Name + " has entered the battle-----------------");
             }
         }

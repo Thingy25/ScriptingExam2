@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IObserver
 {
-    void Receive();
+    void Receive(int skill);
 }

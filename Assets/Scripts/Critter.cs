@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Critter : MonoBehaviour
 {
+    public static Action<Critter> OnCritterDeath;
+
     public string Name { get; protected set; }
     public float BaseAttack { get; protected set; }
     public float BaseDefense { get; protected set; }
@@ -71,6 +74,7 @@ public class Critter : MonoBehaviour
     private void Die()
     {
         HP = 0;
-       // InCritterDeath(this);
+        if (true)   
+        OnCritterDeath(this);
     }
 }
