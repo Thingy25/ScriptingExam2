@@ -18,7 +18,7 @@ public class Competitor
         critters.RemoveAt(0);
     }
 
-    public void AddCritter(Critter crit) //Se hace sobrecarga para agregar critters muertos ilimitados.
+    public void AddCritter(Critter crit)
     {
         critters.Add(crit);
     }

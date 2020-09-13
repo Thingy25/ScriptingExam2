@@ -36,26 +36,17 @@ public class Battleground : IObserverSubject
         isCharacterTurn = currentCritters[0].BaseSpeed >= currentCritters[1].BaseSpeed;
         UI = ui;
 
+        Notify();
         InitiateTurn();
     }
 
     private void InitiateTurn()
     {
         //int skillIndex = 0;
-        if (isCharacterTurn)
-        {
-            //return;
-            
-            //Console.WriteLine("\nYour turn!");
-            //Console.WriteLine("Choose your ability: (0), (1), (2)");
-            //temp = Console.ReadLine();
-            //int.TryParse(temp, out skillIndex);
-        }
+        if (isCharacterTurn) { }
         else
         {
-            //Console.WriteLine("\nThe enemy's turn!");
-            //skillIndex = rand.Next(0, currentCritters[Turn].MoveSet.Count);
-            //Console.WriteLine("The enemy has used: {0}", currentCritters[Turn].MoveSet[skillIndex].Name);
+
         }
         //currentCritters[Turn].MoveSet[skillIndex].UseSkill(currentCritters[Turn], currentCritters[NoTurn]);
         //ChangeTurn();
@@ -68,8 +59,8 @@ public class Battleground : IObserverSubject
             if (currentCharacters[NoTurn].Critters[0].HP > 0)
             {
                 isCharacterTurn = !isCharacterTurn;
+                Notify();
                 InitiateTurn();
-                //Notify(skill);
             }
             else
             {
@@ -102,26 +93,33 @@ public class Battleground : IObserverSubject
         UI.Receive(skill);
     }
 
+    public void Notify()
+    {
+        UI.Receive();
+    }
+
     private void SwapCritter(Critter deadCrit)
     {
+        int offset = 25;
         currentCharacters[NoTurn].RemoveBattlegroundCritter();
         currentCharacters[Turn].AddCritter(deadCrit);
 
-        if (currentCharacters[NoTurn].Critters.Count > 0)
-        {
-            if (currentCharacters[NoTurn].Critters[0].HP > 0)
-            {
-                currentCritters[NoTurn] = currentCharacters[NoTurn].Critters[0];
-                if (isCharacterTurn)
-                {
-                    currentCritters[NoTurn].transform.position = GameManager.Instance.spawnsCrit[4].transform.position;
-                }
-                else
-                {
-                    currentCritters[NoTurn].transform.position = GameManager.Instance.spawnsCrit[3].transform.position;
-                }
-                //Console.WriteLine("\n-----------------" + currentCritters[NoTurn].Name + " has entered the battle-----------------");
-            }
-        }
+        //if (currentCharacters[NoTurn].Critters.Count > 0)
+        //{
+        //    if (currentCharacters[NoTurn].Critters[0].HP > 0)
+        //    {
+        //        currentCritters[NoTurn] = currentCharacters[NoTurn].Critters[0];
+        //        if (isCharacterTurn)
+        //        {
+        //            currentCritters[NoTurn].transform.position = GameManager.Instance.spawnsCrit[4].transform.position;
+        //            GameManager.Instance.spawnsCrit[4].position += Vector3.up * offset;
+        //        }
+        //        else
+        //        {
+        //            currentCritters[NoTurn].transform.position = GameManager.Instance.spawnsCrit[3].transform.position;
+        //            GameManager.Instance.spawnsCrit[3].position += Vector3.up * offset;
+        //        }
+        //    }
+        //}
     }
 }

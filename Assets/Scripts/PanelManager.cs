@@ -57,17 +57,16 @@ public class PanelManager : MonoBehaviour, IObserver
     public void ShowUsedSkill(int skill)
     {
         int turn = Battleground.Instance.Turn;
-        //int noTurn = Battleground.Instance.NoTurn;
         texts[0].text = Battleground.Instance.currentCritters[turn].Name.ToString() + " has used " + Battleground.Instance.currentCritters[turn].MoveSet[skill].Name.ToString();
 
         if (Battleground.Instance.currentCharacters[0].Critters.Count == 0)
         {
-            texts[0].text = "Jessie Team Critcket has won the battle!!!" + "Press [R] to restart the fight";
+            texts[0].text = "Jessie Team Critcket has won the battle!!!";
 
         }
         else if (Battleground.Instance.currentCharacters[1].Critters.Count == 0)
         {
-            texts[0].text = "You have won the battle!!!" + "Press [R] to restart the fight";
+            texts[0].text = "You have won the battle!!!";
         }
     }
 
@@ -86,82 +85,28 @@ public class PanelManager : MonoBehaviour, IObserver
 
     public void HideAbilities()
     {
-        //if (Battleground.Instance.IsCharacterTurn)
-        //{
-        //    abilityButtonOne.SetActive(true);
-        //    abilityButtonTwo.SetActive(true);
-        //    abilityButtonThree.SetActive(true);
-        //}
-        //else
-        //{
-        //    abilityButtonOne.SetActive(false);
-        //    abilityButtonTwo.SetActive(false);
-        //    abilityButtonThree.SetActive(false);
-        //}
-
-        //while (Battleground.Instance.IsCharacterTurn)
-        //{
-        //    abilityButtonOne.SetActive(true);
-        //    abilityButtonTwo.SetActive(true);
-        //    abilityButtonThree.SetActive(true);
-        //}
+        if (Battleground.Instance.IsCharacterTurn == true)
+        {
+            abilityButtonOne.SetActive(true);
+            abilityButtonTwo.SetActive(true);
+            abilityButtonThree.SetActive(true);
+        }
+        else
+        {
+            abilityButtonOne.SetActive(false);
+            abilityButtonTwo.SetActive(false);
+            abilityButtonThree.SetActive(false);
+        }
     }
 
     public void Receive(int skill)
     {
         ShowUsedSkill(skill);
         UpdateCritterHealth();
-        HideAbilities();
     }
 
-    //private void Awake()
-    //{
-    //    gameManager = FindObjectOfType<GameManager>();
-
-    //}
-
-    //[SerializeField] private TextMeshProUGUI gunPieceText;
-    //[SerializeField] private TextMeshProUGUI suitPieceText;
-
-
-
-    //[SerializeField] private TextMeshProUGUI ItemLifeText;
-    //[SerializeField] private TextMeshProUGUI ItemStaminaText;
-    //[SerializeField] private TextMeshProUGUI ItemShotText;
-
-    //private InventoryManager inventory;
-    //ConsuManager itemManager;
-
-
-    //private void Start()
-    //{
-    //if (CurrencyManager.Instance != null)
-    //{
-    //Battleground.Instance.onCritterUpdate += new Battleground.OnCritterUpdate(OnCritterUpdate);
-    //}
-    //if (CraftSystem.Instance != null)
-    //{
-    //    CraftSystem.Instance.onCurrSpent += new CraftSystem.OnCurrencySpent(OnCurrSpent);
-    //}
-    //inventory = InventoryManager.Instance;
-    //itemManager = ConsuManager.Instance;
-    //}
-
-    //void OnCritterUpdate()
-    //{
-    //    allyCritterHealth.text = "HP: " + Battleground.Instance.currentCritters[0].HP.ToString();
-    //    Debug.Log(Battleground.Instance.currentCritters[0].HP);
-    //    Debug.Log("holi");
-    //    enemyCritterHealth.text = "HP: " + Battleground.Instance.currentCritters[1].HP.ToString();
-    //    aliveAllyCritters.text = "Current living critters: " ;
-
-    //    //currencyText.text = inventory.currentCurrency.ToString();
-    //    //gunPieceText.text = inventory.currentGunPieces.ToString();
-    //    //suitPieceText.text = inventory.currentSuitPieces.ToString();
-
-
-    //    //ItemLifeText.text = itemManager.itemlifeRegen.ToString();
-    //    //ItemStaminaText.text = itemManager.itemRunCooldown.ToString();
-    //    //ItemShotText.text = itemManager.itemcooldown.ToString();
-    //}
+    public void Receive()
+    {
+        HideAbilities();
+    }
 }

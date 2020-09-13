@@ -5,4 +5,5 @@ using UnityEngine;
 public interface IObserverSubject
 {
     void Notify(int skill);
+    void Notify();
 }

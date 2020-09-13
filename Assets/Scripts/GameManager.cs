@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -54,17 +55,17 @@ public class GameManager : MonoBehaviour
     {
         if (battleground.IsCharacterTurn == true)
         {
-            if (Input.GetKeyDown(KeyCode.Q))
+            if (Input.GetKeyDown(KeyCode.Q) && Battleground.Instance.currentCharacters[1].Critters.Count > 0)
             {
                 battleground.UseSkill(0);
                 StartCoroutine(WaitForEnemyTurn());
             }
-            if (Input.GetKeyDown(KeyCode.W))
+            if (Input.GetKeyDown(KeyCode.W) && Battleground.Instance.currentCharacters[1].Critters.Count > 0)
             {
                 battleground.UseSkill(1);
                 StartCoroutine(WaitForEnemyTurn());
             }
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E) && Battleground.Instance.currentCharacters[1].Critters.Count > 0)
             {
                 battleground.UseSkill(2);
                 StartCoroutine(WaitForEnemyTurn());
@@ -216,14 +217,6 @@ public class GameManager : MonoBehaviour
             {
                 enemyCritterData.RemoveAt(i);
             }
-        }
-    }
-
-    public void RestartScene()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene);
         }
     }
 }
